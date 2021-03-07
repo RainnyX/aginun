@@ -3,8 +3,8 @@
     <div>
       <v-text-field
         :value="selectedFilters.search"
-        label="Search by role title"
-        placeholder="Facilitator, Writer, Photographer..."
+        :label="$t('Search by role title')"
+        :placeholder="$t('Facilitator, Writer, Photographer...')"
         class="mt-3"
         clearable
         @input="debounceSearchUpdate"
@@ -12,13 +12,13 @@
     </div>
     <filter-section>
       <template v-slot:title>
-        Groups
+        {{ $t("Groups") }}
       </template>
       <flex-wrapper direction="column">
         <autocomplete-custom
           :items="localGroups"
           :selected-items-ids="selectedFilters.localGroups"
-          label="Local Group"
+          :label="$t('Local Group')"
           @change="
             setFilter({ filterType: 'localGroups', filterValue: $event })
           "
@@ -26,7 +26,7 @@
         <autocomplete-custom
           :items="workingCircles"
           :selected-items-ids="selectedFilters.workingCircles"
-          label="Working circle"
+          :label="$t('Working circle')"
           @change="
             setFilter({ filterType: 'workingCircles', filterValue: $event })
           "
@@ -35,7 +35,7 @@
     </filter-section>
     <filter-section>
       <template v-slot:title>
-        Time commitment
+        {{ $t("Time commitment") }}
       </template>
       <v-range-slider
         :value="selectedFilters.timeCommitment"
@@ -43,7 +43,7 @@
         :max="timeCommitmentRange.max"
         class="mt-12"
         thumb-label="always"
-        label="Time Commitment"
+        :label="$t('Time Commitment')"
         @end="setFilter({ filterType: 'timeCommitment', filterValue: $event })"
       />
     </filter-section>
@@ -52,22 +52,25 @@
 
 <script>
 import FlexWrapper from "@/components/layout/FlexWrapper.vue";
-import AutocompleteCustom from "@/components/AutocompleteCustom";
-import { mapState, mapGetters, mapActions } from "vuex";
-import FilterDrawerSection from "../layout/FilterDrawerSection";
+import AutocompleteCustom from "@/components/AutocompleteCustom.vue";
+import { mapState, mapActions } from "vuex";
 import debounce from "lodash/debounce";
+import { timeCommitmentRange } from "@/constants/timeCommitments";
+import FilterDrawerSection from "../layout/FilterDrawerSection.vue";
 
 export default {
   name: "RoleFilters",
   components: {
     filterSection: FilterDrawerSection,
     AutocompleteCustom,
-    FlexWrapper,
+    FlexWrapper
   },
+  data: () => ({
+    timeCommitmentRange
+  }),
   computed: {
     ...mapState("groups", ["localGroups", "workingCircles"]),
-    ...mapState("roles", ["selectedFilters"]),
-    ...mapGetters("defaults", ["timeCommitmentRange"]),
+    ...mapState("roles", ["selectedFilters"])
   },
   beforeMount() {
     this.$store.dispatch("roles/setDefaultFilters");
@@ -75,10 +78,10 @@ export default {
   methods: {
     ...mapActions("roles", ["setFilter"]),
     debounceSearchUpdate: debounce(function($event) {
-      const filterValue = $event ? $event : "";
+      const filterValue = $event || "";
       this.setFilter({ filterType: "search", filterValue });
-    }, 500),
-  },
+    }, 500)
+  }
 };
 </script>
 

@@ -7,7 +7,7 @@
       {{ role.title }}
     </template>
     <template #subtitle>
-      {{ role.localGroup.title }} <br>
+      {{ role.localGroup.title }} <br />
       {{ role.workingCircle.title }}
     </template>
     <template #meta>
@@ -16,42 +16,44 @@
           {{ role.timeCommitmentMin }} -
           {{ role.timeCommitmentMax }}
         </span>
-        <span class="overline text-uppercase">hours / week</span>
+        <span class="overline text-uppercase">{{ $t("hours / week") }}</span>
       </span>
     </template>
     <template #action>
       <v-btn dark :to="`roles/view/${role.id}`">
-        Read More
+        {{ $t("Read More") }}
       </v-btn>
     </template>
   </default-card>
 </template>
-
 <script>
-
-import { mapState } from "vuex";
-import DefaultCard from "@/components/surfaces/DefaultCard.vue";
+import DefaultCard from "@/components/layout/DefaultCard.vue";
+import styles from "@/constants/styles";
 
 export default {
   name: "RoleCard",
   components: {
-    DefaultCard,
+    DefaultCard
   },
-    props: {
+  data: () => ({
+    workingCircleColours: styles.workingCircleColours
+  }),
+  props: {
     role: {
       type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    ...mapState("styles", ["workingCircleColours"]),
+      required: true
+    }
   },
   methods: {
-    getColour: function(workingCircle) {
+    getColour(workingCircle) {
       return this.workingCircleColours[workingCircle.title];
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.overline {
+  font-family: unset !important;
+}
+</style>

@@ -25,7 +25,7 @@ You can install the application in your own computer by following these simple s
 1. Clone the repository by running `git clone https://github.com/xrnl/aginun.git` in your terminal.
 2. Navigate into the project directory (`cd aginun`) and install packages with the command `npm install`
 3. [Request the development API key](https://github.com/xrnl/aginun/blob/master/SUPPORT.md).
-4. Once you have the API key, store it in a file named `.env.local` as follows: `VUE_APP_API_KEY=<API_KEY>`, where `<API_KEY>` is the value of the API key.
+4. Copy the `.env.example` file to `.env.local`, as follows: `cp .env.example .env.local` Once you have the API key, replace `<API_KEY>` in the `.env.local` file with your API key.
 
 If you wish edit the code of this application, we recommend using [this setup](https://github.com/xrnl/aginun/wiki/Recommended-setup).
 
@@ -46,6 +46,7 @@ npm run test:unit
 ```
 
 Add the `-s` or `--silent` flag to avoid NPM error messages if tests fail.
+During development, the `test:unit:dev` command can be used to keep the tests running.
 
 ### End to End tests (to be implemented)
 

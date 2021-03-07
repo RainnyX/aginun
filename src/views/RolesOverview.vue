@@ -5,9 +5,13 @@
     <div v-if="isMobile" class="mb-8">
       <v-divider />
       <div class="d-flex justify-space-between pa-3">
-        <new-item-button text="New Role" @click="showNewRoleDialog" />
+        <new-item-button
+          v-if="loggedIn"
+          :text="$t('New Role')"
+          @click="showNewRoleDialog"
+        />
         <v-btn text color="primary" @click="isDrawerOpen = true">
-          Filter
+          {{ $t("Filter") }}
         </v-btn>
       </div>
       <v-divider />
@@ -21,7 +25,7 @@
         key="loading"
         class="d-flex flex-column justify-center align-center mt-5"
       >
-        <spinner text="Loading roles" />
+        <spinner :text="$t('Loading roles')" />
       </div>
       <div
         v-if="!roles.length && !isLoadingRoles"
@@ -29,11 +33,11 @@
         class="pa-5 text-center"
       >
         <div v-if="isUsingFilters">
-          <h3>No results.</h3>
-          <p>Try removing filters.</p>
+          <h3>{{ $t("No results.") }}</h3>
+          <p>{{ $t("Try removing filters.") }}</p>
         </div>
         <div v-else>
-          <p>There are currently no published roles.</p>
+          <p>{{ $t("There are currently no published roles.") }}</p>
         </div>
       </div>
     </transition>
@@ -45,7 +49,7 @@
           key="loading"
           class="d-flex flex-column justify-center align-center mt-5"
         >
-          <spinner text="Loading roles" />
+          <spinner :text="$t('Loading roles')" />
         </div>
         <span v-else />
       </template>
@@ -65,22 +69,26 @@
           >
             <div class="d-flex flex-column">
               <span class="font-weight-bold">
-                Search for positions
+                {{ $t("Search for positions") }}
               </span>
               <span v-if="isMobile" class="font-weight-light">
                 (<span v-if="!isLoadingRoles">{{ roles.length }}</span>
                 <span v-else>...</span>
-                positions found)
+                {{ $t("positions found") }})
               </span>
             </div>
             <v-btn text color="primary" @click="setDefaultFilters">
-              Clear filters
+              {{ $t("Clear filters") }}
             </v-btn>
           </div>
         </template>
         <role-filters />
         <div v-if="!isMobile" class="text-center mt-4">
-          <new-item-button text="New Role" @click="showNewRoleDialog" />
+          <new-item-button
+            v-if="loggedIn"
+            :text="$t('New Role')"
+            @click="showNewRoleDialog"
+          />
         </div>
       </default-drawer>
     </template>
@@ -110,28 +118,31 @@ export default {
     NewItemButton,
     RoleEditDialog,
     InfiniteLoading,
-    Spinner,
+    Spinner
   },
   data: () => ({
     newRoleDialog: false,
-    isDrawerOpen: null,
+    isDrawerOpen: null
   }),
   computed: {
     ...mapState("roles", [
       "roles",
       "isLoadingRoles",
       "selectedFilters",
-      "infiniteScrollId",
+      "infiniteScrollId"
     ]),
-    ...mapGetters("roles", ["isUsingFilters"]),
+    ...mapGetters({
+      loggedIn: "user/loggedIn",
+      isUsingFilters: "roles/isUsingFilters"
+    }),
     isMobile: function() {
       return this.$vuetify.breakpoint.smAndDown;
-    },
+    }
   },
   watch: {
     isMobile: function() {
       this.isDrawerOpen = !this.isMobile;
-    },
+    }
   },
   created: function() {
     this.isDrawerOpen = !this.isMobile;
@@ -143,7 +154,7 @@ export default {
     },
     showNewRoleDialog: function() {
       this.newRoleDialog = true;
-    },
-  },
+    }
+  }
 };
 </script>

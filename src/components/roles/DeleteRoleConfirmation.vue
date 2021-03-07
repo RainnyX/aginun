@@ -2,18 +2,18 @@
   <v-dialog :value="value" width="750" @input="$emit('input', false)">
     <v-card>
       <v-card-title>
-        <h3>
-          Are you sure you want to delete
-          <span class="carrier">{{ roleTitle }}</span>
-          ?
-        </h3>
+        <i18n path="Are you sure you want to delete {roleTitle}?" tag="h3">
+          <template v-slot:roleTitle>
+            <span class="carrier">{{ roleTitle }}</span>
+          </template>
+        </i18n>
       </v-card-title>
       <v-card-actions class="d-flex justify-end">
         <v-btn color="primary" text @click="$emit('input', false)">
-          Cancel
+          {{ $t("Cancel") }}
         </v-btn>
         <v-btn color="error" @click="onDeleteRole">
-          Delete
+          {{ $t("Delete") }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -21,32 +21,33 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+
 export default {
   name: "DeleteRoleConfirmation",
   props: {
     value: {
       type: Boolean,
-      default: false,
+      default: false
     },
     roleId: {
       type: Number,
-      required: true,
+      required: true
     },
     roleTitle: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     ...mapActions("roles", ["deleteRole"]),
     ...mapActions("alerts", ["displaySuccess"]),
-    onDeleteRole: function() {
+    onDeleteRole() {
       this.deleteRole(this.roleId);
       this.$emit("input", false);
       this.displaySuccess("Role deleted");
       this.$router.push("/roles");
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
